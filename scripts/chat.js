@@ -27,6 +27,7 @@ class RollForMeChat {
 
     const buttonsHtml = buttonSet.buttons.map((button, index) => {
       return `<button class="roll-for-me-chat-button" 
+      style="background-color: ${button.color}; color: white;"
               data-message-id="${messageId}" 
               data-button-index="${index}">
          ${button.label}

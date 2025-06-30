@@ -9,32 +9,32 @@ const DEFAULT_BUTTON_SETS = [
       {
         label: "Dodge",
         command: "[dodge]",
-        color: "#dc3545",
+        color: "#814e4e",
         icon: "fas fa-sword"
       },
       {
         label: "Dodge and drop",
         command: '[dodge+3 "Se joga no chão seu merda"]',
-           color: "#dc3545",
+        color: "#5c2e2e",
         icon: "fas fa-sword"
         
       },
       {
         label: "Acrobatics Dodge",
         command: '["Acrobatic Dodge!" /if [S:Acrobatics] [Dodge +2] /else [Dodge -2]]',
-           color: "#dc3545",
+        color: "#2a2d37",
         icon: "fas fa-sword"
       },
       {
         label: "Feverish Defense ",
         command: '["Feverish Dodge"/r [Dodge+2 Feverish Defense *Cost 1FP]]',
-           color: "#dc3545",
+        color: "#211e1e",
         icon: "fas fa-sword"
       },
         {
         label: "Retreating Dodge ",
         command: '["Retreating Dodge"/r [Dodge+3 Retreating]]',
-           color: "#dc3545",
+        color: "#171819",
         icon: "fas fa-sword"
       }
     ]
@@ -45,43 +45,43 @@ const DEFAULT_BUTTON_SETS = [
       {
         label: "Observation",
         command: "/r [/if [?SK:observation] [Sk:observation] /else [vision]]",
-           color: "#dc3545",
+        color: "#dc3545",
         icon: "fas fa-sword"
       },
       {
         label: "Vision",
         command: '[vision ? "Eu Acho que eu vi um gatinho" ,"Eu não vi nada"]',
-           color: "#dc3545",
+        color: "#dc3545",
         icon: "fas fa-sword"
       },
       {
         label: "Perception",
         command: "[per]",
-           color: "#dc3545",
+        color: "#dc3545",
         icon: "fas fa-sword"
       },
       {
         label: "Hearing",
         command: '[Hearing ? "Eu ouvi isso hein!" ,"Ahn?"]',
-           color: "#dc3545",
+        color: "#dc3545",
         icon: "fas fa-sword"
       },
        {
         label: "Touch",
         command: '[Touch ? "Eu senti algo crescendo aqui" ,"Num to tintindo nada"]',
-           color: "#dc3545",
+        color: "#dc3545",
         icon: "fas fa-sword"
       },
          {
         label: "Taste",
         command: '[Taste ? "Gostinho bom" ,"Que coisa mais sem sal."]',
-           color: "#dc3545",
+        color: "#dc3545",
         icon: "fas fa-sword"
       },
       {
         label: "Smell",
         command: '[Smell ? "Tou sentindo esse cheiro" ,"Alguém peidou?"]',
-           color: "#dc3545",
+        color: "#dc3545",
         icon: "fas fa-sword"
       }
     ]
