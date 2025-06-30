@@ -18,6 +18,19 @@
     "scripts/config.js",
     "scripts/chat.js"
   ],
+   "packs": [
+    {
+      "name": "roll-for-me",
+      "label": "Roll for me",
+      "path": "packs/roll-for-me",
+      "type": "Macro",
+      "ownership": {
+        "PLAYER": "OBSERVER",
+        "ASSISTANT": "OWNER"
+      }
+    }
+   ],
+  
   "styles": [
     "styles/module.css"
   ],
