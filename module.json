@@ -1,0 +1,36 @@
+{
+  "id": "roll-for-me",
+  "title": "Roll for Me",
+  "description": "Configure custom buttons with GURPS OTF commands and send them to chat for easy rolling.",
+  "version": "0.0.1",
+  "compatibility": {
+    "minimum": "12",
+    "verified": "13"
+  },
+  "authors": [
+    {
+      "name": "Boifubá"
+    }
+  ],
+  "scripts": [
+    "scripts/main.js",
+    "scripts/defaults.js",
+    "scripts/config.js",
+    "scripts/chat.js"
+  ],
+  "styles": [
+    "styles/module.css"
+  ],
+  "languages": [
+    {
+      "lang": "en",
+      "name": "English",
+      "path": "lang/en.json"
+    }
+  ],
+  "socket": false,
+  "manifest": "https://github.com/boifuba/roll-for-me/releases/download/lastest/module.json",
+  "download": "https://github.com/boifuba/roll-for-me/releases/download/latest/roll-for-me.zip"
+}
+
+
