@@ -1,38 +1,26 @@
 {
-  "id": "roll-for-me",
-  "title": "Roll for Me",
-  "description": "Configure custom buttons with GURPS OTF commands and send them to chat for easy rolling.",
-  "version": "0.0.1",
-  "compatibility": {
-    "minimum": "12",
-    "verified": "13"
-  },
+  "id": "gurps-roll-for-me",
+  "title": "GURPS Roll for Me!",
+  "description": "A comprehensive FoundryVTT module for creating and managing custom GURPS roll button sets in chat. Streamline your GURPS game with quick-access buttons for common rolls, tests, and actions.",
   "authors": [
     {
-      "name": "Boifubá"
+      "name": "Boifubá",
+      "url": "https://github.com/Boifuba",
+      "discord": "boifuba",
+      "flags": {}
     }
   ],
+  "version": "0.5.8",
+  "compatibility": {
+    "minimum": "13",
+    "verified": "13",
+    "maximum": "13"
+  },
   "scripts": [
-    "scripts/main.js",
-    "scripts/defaults.js",
-    "scripts/config.js",
-    "scripts/chat.js"
-  ],
-   "packs": [
-    {
-      "name": "roll-for-me",
-      "label": "Roll for me",
-      "path": "packs/roll-for-me",
-      "type": "Macro",
-      "ownership": {
-        "PLAYER": "OBSERVER",
-        "ASSISTANT": "OWNER"
-      }
-    }
-   ],
-  
-  "styles": [
-    "styles/module.css"
+    "config.js",
+    "chat.js", 
+    "selector.js",
+    "main.js"
   ],
   "languages": [
     {
@@ -41,9 +29,10 @@
       "path": "lang/en.json"
     }
   ],
-  "socket": false,
-  "manifest": "https://github.com/boifuba/roll-for-me/releases/download/lastest/module.json",
-  "download": "https://github.com/boifuba/roll-for-me/releases/download/latest/roll-for-me.zip"
+  "url": "https://github.com/your-username/gurps-roll-for-me",
+  "manifest": "https://github.com/your-username/gurps-roll-for-me/releases/latest/download/module.json",
+  "download": "https://github.com/your-username/gurps-roll-for-me/releases/latest/download/gurps-roll-for-me.zip",
+  "bugs": "https://github.com/your-username/gurps-roll-for-me/issues",
+  "changelog": "https://github.com/your-username/gurps-roll-for-me/releases",
+  "readme": "https://github.com/your-username/gurps-roll-for-me/blob/main/README.md"
 }
-
-

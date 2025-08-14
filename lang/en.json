@@ -3,66 +3,13 @@
     "Settings": {
       "ButtonSets": {
         "Name": "Button Sets",
-        "Hint": "Internal storage for button set configurations"
+        "Hint": "Configuration data for Roll for Me button sets"
       },
       "ConfigMenu": {
-        "Name": "Configure Roll for Me",
+        "Name": "Roll for Me Configuration",
         "Label": "Configure Button Sets",
-        "Hint": "Configure your custom roll button sets"
+        "Hint": "Open the Roll for Me configuration dialog to manage your button sets"
       }
-    },
-    "Controls": {
-      "Title": "Roll for Me"
-    },
-    "Tools": {
-      "SendButtons": {
-        "Title": "Send Button Set to Chat"
-      },
-      "Configure": {
-        "Title": "Configure Button Sets"
-      }
-    },
-    "Config": {
-      "Title": "Roll for Me Configuration",
-      "Instructions": "Configure your custom roll button sets",
-      "InstructionsText": "Create sets of buttons with GURPS OTF commands. When clicked in chat, they will execute the specified command.",
-      "Set": "Set",
-      "SetName": "Set Name",
-      "SetNamePlaceholder": "Enter set name...",
-      "Button": "Button",
-      "Label": "Button Label",
-      "LabelPlaceholder": "Enter button name...",
-      "Command": "GURPS OTF Command",
-      "CommandPlaceholder": "Enter GURPS OTF command (e.g., 3d6, ST+2, DX-3)...",
-      "AddSet": "Add New Set",
-      "AddButton": "Add New Button",
-      "TestButton": "Test Command",
-      "DeleteButton": "Delete Button",
-      "DeleteSet": "Delete Set",
-      "Save": "Save Configuration",
-      "Close": "Close",
-      "NewSet": "New Set",
-      "NewButton": "New Button"
-    },
-    "SetSelector": {
-      "Title": "Select Button Set",
-      "Instructions": "Choose which button set to send to chat:",
-      "ButtonCount": "buttons",
-      "SendToChat": "Send to Chat"
-    },
-    "Chat": {
-      "ButtonsTitle": "Roll Buttons"
-    },
-    "Notifications": {
-      "NoButtons": "No buttons configured in this set. Please configure buttons first.",
-      "NoSets": "No button sets configured. Please configure button sets first.",
-      "NoCommand": "No command specified for this button.",
-      "GurpsNotAvailable": "GURPS system not available. This module requires the GURPS game system.",
-      "CommandExecuted": "Executed command for: {label}",
-      "ExecutionError": "Error executing command: {error}",
-      "ConfigSaved": "Button set configuration saved successfully!",
-      "TestSuccess": "Test successful for button: {label}",
-      "TestError": "Test failed: {error}"
     }
   }
 }
