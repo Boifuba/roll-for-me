@@ -327,4 +327,6 @@ class RollForMeSetSelector extends foundry.applications.api.ApplicationV2 {
 }
 
 // Expose class globally for access from main module
-window.RollForMeSetSelector = RollForMeSetSelector;
+if (typeof window !== 'undefined') {
+  window.RollForMeSetSelector = RollForMeSetSelector;
+}

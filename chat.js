@@ -183,6 +183,7 @@ class RollForMeChat {
       ui.notifications.info(`Roll for Me: Command sent to chat - ${label}`);
       
     } catch (error) {
+      console.error("Roll for Me: Command execution error", error);
       ui.notifications.error(`Roll for Me: Error executing command: ${error.message}`);
     }
   }
@@ -197,7 +198,9 @@ class RollForMeChat {
 }
 
 // Expose class globally for access from other modules
-window.RollForMeChat = RollForMeChat;
+if (typeof window !== 'undefined') {
+  window.RollForMeChat = RollForMeChat;
+}
 
 // Global event listener for chat button clicks
 document.addEventListener('click', function(event) {
@@ -208,5 +211,5 @@ document.addEventListener('click', function(event) {
 
 // Initialize when FoundryVTT is ready
 Hooks.once('ready', () => {
-  // Module chat integration ready
+  console.log("Roll for Me: Chat integration ready");
 });

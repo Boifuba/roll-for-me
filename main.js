@@ -6,11 +6,16 @@
  * @version 0.5.8
  */
 
+// Expose classes globally before hooks
+window.RollForMeConfig = RollForMeConfig;
+window.RollForMeSetSelector = RollForMeSetSelector;
+window.RollForMeChat = RollForMeChat;
+
 Hooks.once('init', () => {
   // Register module settings for button sets storage
   game.settings.register('gurps-roll-for-me', 'buttonSets', {
-    name: 'ROLLME.Settings.ButtonSets.Name',
-    hint: 'ROLLME.Settings.ButtonSets.Hint',
+    name: 'Button Sets Configuration',
+    hint: 'Stores all configured button sets for the module',
     scope: 'world',
     config: false,
     type: Array,
@@ -19,43 +24,59 @@ Hooks.once('init', () => {
 
   // Register the configuration menu in settings
   game.settings.registerMenu('gurps-roll-for-me', 'configMenu', {
-    name: 'ROLLME.Settings.ConfigMenu.Name',
-    label: 'ROLLME.Settings.ConfigMenu.Label',
-    hint: 'ROLLME.Settings.ConfigMenu.Hint',
+    name: 'Configure Button Sets',
+    label: 'Button Sets',
+    hint: 'Configure custom button sets for GURPS rolls',
     icon: 'fas fa-dice',
     type: RollForMeConfig,
     restricted: true
   });
-});
 
-Hooks.once('ready', () => {
-  // Initialize default button sets if none exist
-  initializeDefaultButtonSets();
-  
-  // Expose API functions for macro access and external use
+  // Initialize API early
   game.rollForMe = {
     showSetSelector: () => {
-      if (typeof RollForMeSetSelector !== 'undefined') {
+      try {
         return new RollForMeSetSelector().render(true);
-      } else {
-        ui.notifications.error("Roll for Me: Set Selector is not available!");
+      } catch (error) {
+        console.error("Roll for Me: Error showing selector", error);
+        ui.notifications.error("Roll for Me: Error showing set selector!");
       }
     },
     openConfig: () => {
-      if (typeof RollForMeConfig !== 'undefined') {
+      try {
         return new RollForMeConfig().render(true);
-      } else {
-        ui.notifications.error("Roll for Me: Configuration dialog is not available!");
+      } catch (error) {
+        console.error("Roll for Me: Error opening config", error);
+        ui.notifications.error("Roll for Me: Error opening configuration!");
       }
     },
-    sendButtonSetToChat: (setIndex) => RollForMeChat.sendButtonSetToChat(setIndex),
-    sendButtonsToChat: (setIndex) => RollForMeChat.sendButtonsToChat(setIndex),
+    sendButtonSetToChat: (setIndex) => {
+      try {
+        return RollForMeChat.sendButtonSetToChat(setIndex);
+      } catch (error) {
+        console.error("Roll for Me: Error sending to chat", error);
+        ui.notifications.error("Roll for Me: Error sending buttons to chat!");
+      }
+    },
+    sendButtonsToChat: (setIndex) => {
+      try {
+        return RollForMeChat.sendButtonsToChat(setIndex);
+      } catch (error) {
+        console.error("Roll for Me: Error sending to chat", error);
+        ui.notifications.error("Roll for Me: Error sending buttons to chat!");
+      }
+    },
     forceLoadDefaults: () => forceLoadDefaults(),
     clearSettings: () => {
       game.settings.set('gurps-roll-for-me', 'buttonSets', []);
       ui.notifications.info("Roll for Me: Settings cleared! Reload to apply defaults.");
     }
   };
+});
+
+Hooks.once('ready', () => {
+  // Initialize default button sets if none exist
+  initializeDefaultButtonSets();
   
   // Add quick access button to token controls
   Hooks.on('getSceneControlButtons', (controls) => {
@@ -67,15 +88,22 @@ Hooks.once('ready', () => {
         icon: 'fas fa-dice',
         button: true,
         onClick: () => {
-          if (game.rollForMe && game.rollForMe.showSetSelector) {
-            game.rollForMe.showSetSelector();
-          } else {
-            ui.notifications.error("Roll for Me: Module is not ready!");
+          try {
+            if (game.rollForMe && game.rollForMe.showSetSelector) {
+              game.rollForMe.showSetSelector();
+            } else {
+              ui.notifications.error("Roll for Me: Module is not ready!");
+            }
+          } catch (error) {
+            console.error("Roll for Me: Error in token control", error);
+            ui.notifications.error("Roll for Me: Error opening selector!");
           }
         }
       });
     }
   });
+
+  console.log("Roll for Me: Module ready!");
 });
 
 // Handle chat button interactions

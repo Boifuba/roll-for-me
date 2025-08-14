@@ -92,7 +92,6 @@ class RollForMeConfig extends foundry.applications.api.ApplicationV2 {
           align-items: center;
           transition: all 0.2s ease;
           padding: 8px 12px;
-          gap: 6px;
         }
         
         .toggle-icon {
@@ -431,4 +430,6 @@ class RollForMeConfig extends foundry.applications.api.ApplicationV2 {
 }
 
 // Expose class globally for access from main module
-window.RollForMeConfig = RollForMeConfig;
+if (typeof window !== 'undefined') {
+  window.RollForMeConfig = RollForMeConfig;
+}
