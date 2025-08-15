@@ -75,36 +75,12 @@ Hooks.once('init', () => {
 });
 
 Hooks.once('ready', () => {
-  // Initialize default button sets if none exist
+  // Inicializa sets padrões
   initializeDefaultButtonSets();
-  
-  // Add quick access button to token controls
-  Hooks.on('getSceneControlButtons', (controls) => {
-    const tokenTools = controls.find(c => c.name === 'token');
-    if (tokenTools) {
-      tokenTools.tools.push({
-        name: 'roll-for-me',
-        title: 'Roll for Me',
-        icon: 'fas fa-dice',
-        button: true,
-        onClick: () => {
-          try {
-            if (game.rollForMe && game.rollForMe.showSetSelector) {
-              game.rollForMe.showSetSelector();
-            } else {
-              ui.notifications.error("Roll for Me: Module is not ready!");
-            }
-          } catch (error) {
-            console.error("Roll for Me: Error in token control", error);
-            ui.notifications.error("Roll for Me: Error opening selector!");
-          }
-        }
-      });
-    }
-  });
-
   console.log("Roll for Me: Module ready!");
+
 });
+
 
 // Handle chat button interactions
 Hooks.on('renderChatMessage', (message, html, data) => {
@@ -173,3 +149,18 @@ function forceLoadDefaults() {
   game.settings.set('gurps-roll-for-me', 'buttonSets', DEFAULT_BUTTON_SETS);
   ui.notifications.info("Roll for Me: Default button sets reloaded!");
 }
+
+Hooks.on("getSceneControlButtons", (controls) => {
+  const tokens = controls?.tokens;
+  if (!tokens) return;
+
+  tokens.tools ??= {};
+  tokens.tools["roll-for-me"] ??= {
+    name: "roll-for-me",
+    title: "GURPS Roll for Me",
+    icon: "fas fa-dice",
+    button: true,
+    visible: true,
+    onClick: () => game.rollForMe?.showSetSelector?.()
+  };
+});
