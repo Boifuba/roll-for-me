@@ -39,11 +39,8 @@ class RollForMeChat {
     // Create unique ID for this chat message
     const messageId = foundry.utils.randomID();
     
-    // Store button data globally for click handling
-    if (!window.rollForMeButtonData) {
-      window.rollForMeButtonData = {};
-    }
-    window.rollForMeButtonData[messageId] = set.buttons.map(button => ({
+    // Prepare button data with blind flag
+    const buttonData = set.buttons.map(button => ({
       ...button,
       isBlind: isBlind
     }));
@@ -57,7 +54,8 @@ class RollForMeChat {
         "gurps-roll-for-me": {
           isButtonMessage: true,
           setIndex: setIndex,
-          messageId: messageId
+          messageId: messageId,
+          buttonData: buttonData // Store button data in message flags
         }
       }
     };
@@ -76,8 +74,9 @@ class RollForMeChat {
   static _generateChatHtml(set, setIndex, messageId, isBlind = false) {
     const buttons = set.buttons.map((button, buttonIndex) => {
       const escapedLabel = this._escapeHtml(button.label);
-      const buttonStyle = isBlind ? 'background: white; margin: 2px;' : 'margin: 2px;';
+      const buttonStyle = isBlind ? 'background: #f0f0f0; color: #666; margin: 2px;' : 'margin: 2px;';
       const buttonText = escapedLabel;
+      const blindIcon = isBlind ? '<i class="fas fa-eye-slash" style="margin-right: 4px; opacity: 0.6;"></i>' : '';
       
       return `
         <button class="gurps-roll-for-me-chat-button" 
@@ -85,18 +84,21 @@ class RollForMeChat {
                 data-button-index="${buttonIndex}"
                 title="${escapedLabel}"
                 style="${buttonStyle}">
-          ${buttonText}
+          ${blindIcon}${buttonText}
         </button>
       `;
     }).join('');
+    
+    const setIcon = isBlind ? 'fa-eye-slash' : 'fa-dice';
+    const setTitle = isBlind ? `${set.name} (Blind Rolls)` : set.name;
     
     return `
       <div class="gurps-roll-for-me-chat-container" style="padding: 8px; margin: 4px 0;">
         <div class="gurps-roll-for-me-header" style="margin-bottom: 8px; padding-bottom: 4px;">
           <div class="icon-container" style="display: inline-block; margin-right: 8px;">
-            <i class="fas fa-dice"></i>
+            <i class="fas ${setIcon}"></i>
           </div>
-          <strong>${this._escapeHtml(set.name)}</strong>
+          <strong>${this._escapeHtml(setTitle)}</strong>
         </div>
         <div class="gurps-roll-for-me-buttons" style="display: flex; flex-wrap: wrap; gap: 4px;">
           ${buttons}
@@ -117,24 +119,41 @@ class RollForMeChat {
     const messageId = button.dataset.messageId;
     const buttonIndex = parseInt(button.dataset.buttonIndex);
     
-    // Retrieve button data from global storage
-    if (!window.rollForMeButtonData || !window.rollForMeButtonData[messageId]) {
-      ui.notifications.error("Roll for Me: Button data not found!");
+    // Find the chat message by looking for the message ID in the DOM
+    const chatMessage = button.closest('.message');
+    if (!chatMessage) {
+      ui.notifications.error("Roll for Me: Could not find chat message!");
       return;
     }
     
-    const buttonData = window.rollForMeButtonData[messageId][buttonIndex];
-    if (!buttonData) {
+    // Get message ID from the chat message element
+    const foundryMessageId = chatMessage.dataset.messageId;
+    if (!foundryMessageId) {
+      ui.notifications.error("Roll for Me: Could not identify chat message!");
+      return;
+    }
+    
+    // Retrieve the ChatMessage object
+    const message = game.messages.get(foundryMessageId);
+    if (!message) {
+      ui.notifications.error("Roll for Me: Chat message not found!");
+      return;
+    }
+    
+    // Get button data from message flags
+    const buttonData = message.flags?.["gurps-roll-for-me"]?.buttonData;
+    if (!buttonData || !buttonData[buttonIndex]) {
       ui.notifications.error("Roll for Me: Button configuration not found!");
       return;
     }
     
-    let command = buttonData.command;
-    const label = buttonData.label;
-    const isBlind = buttonData.isBlind;
+    const buttonConfig = buttonData[buttonIndex];
+    let command = buttonConfig.command;
+    const label = buttonConfig.label;
+    const isBlind = buttonConfig.isBlind;
     
     // Add blind modifier to command if needed
-    if (isBlind && command.includes('[')) {
+    if (isBlind && command.includes('[') && !command.includes('[!')) {
       command = command.replace('[', '[!');
     }
     
@@ -150,6 +169,15 @@ class RollForMeChat {
         return;
       }
       
+      // First, auto-select the player's own token
+      if (typeof GURPS.executeOTF === 'function') {
+        try {
+          await GURPS.executeOTF('!/select @self');
+        } catch (error) {
+          console.warn("Roll for Me: Could not auto-select token:", error);
+        }
+      }
+      
       // Primary method: Use GURPS.executeOTF directly
       if (typeof GURPS.executeOTF === 'function') {
         await GURPS.executeOTF(command);
@@ -158,7 +186,17 @@ class RollForMeChat {
       
       // Fallback 1: Use GURPS.parselink if available
       if (GURPS.parselink && typeof GURPS.parselink === 'function') {
-        const actor = game.user.character || canvas.tokens.controlled[0]?.actor;
+        // Try to find an actor in order of preference:
+        // 1. User's assigned character
+        // 2. Currently selected token's actor
+        // 3. Any actor the user owns
+        let actor = game.user.character || canvas.tokens.controlled[0]?.actor;
+        
+        // If no actor found yet, search for any owned actor
+        if (!actor) {
+          actor = game.actors.find(a => a.isOwner);
+        }
+        
         if (!actor) {
           ui.notifications.warn("Roll for Me: No character selected!");
           return;
